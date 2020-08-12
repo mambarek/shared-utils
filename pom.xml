@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.it2go</groupId>
+  <artifactId>shared-utils</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>11</java.version>
+    <org.projectlombok.version>1.18.12</org.projectlombok.version>
+    <slf4j.version>1.7.30</slf4j.version>
+    <persistence-api.version>2.2.3</persistence-api.version>
+    <jackson.version>2.11.1</jackson.version>
+    <hibernate.version>5.4.18.Final</hibernate.version>
+  </properties>
+
+  <scm>
+    <developerConnection>scm:git:http://mmbarek:mmbarek@ubuntu-server:7990/scm/base/shared-utils.git
+    </developerConnection>
+    <url>http://ubuntu-server:7990/scm/base/shared-utils</url>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${org.projectlombok.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+      <version>${persistence-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>11</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- For artifacts upload -->
+  <distributionManagement>
+    <snapshotRepository>
+      <id>nexus</id>
+      <name>nexus-snapshot</name>
+      <url>http://localhost:8081/repository/nexus-snapshot</url>
+    </snapshotRepository>
+    <repository>
+      <id>nexus</id>
+      <name>nexus-release</name>
+      <url>http://localhost:8081/repository/nexus-release</url>
+    </repository>
+  </distributionManagement>
+
+</project>
