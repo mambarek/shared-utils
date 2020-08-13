@@ -15,11 +15,13 @@ import lombok.AllArgsConstructor;
 public class SearchFilter<T,Y> {
 
   private final Class<T> itemType;
+  private final Class<Y> entityType;
 
-  public List<T> search(EntityManager em, CompoundSelection<T> compoundSelection, Root<Y> root, SearchTemplate searchTemplate){
+  public List<T> search(EntityManager em, CompoundSelection<T> compoundSelection, SearchTemplate searchTemplate){
     CriteriaBuilder cb = em.getCriteriaBuilder();
 
     CriteriaQuery<T> criteriaQuery = cb.createQuery(itemType);
+    Root<Y> root = criteriaQuery.from(entityType);
     final CriteriaQuery<T> select = criteriaQuery.select(compoundSelection);
 
     PredicateBuilder predicateBuilder = null;
