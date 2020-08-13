@@ -15,20 +15,17 @@ import lombok.AllArgsConstructor;
 public class SearchFilter<T,Y> {
 
   private final Class<T> itemType;
-  private final Class<Y> rootType;
 
-  public List<T> search(EntityManager em, CompoundSelection<T> compoundSelection, SearchTemplate searchTemplate){
+  public List<T> search(EntityManager em, CompoundSelection<T> compoundSelection, Root<Y> root, SearchTemplate searchTemplate){
     CriteriaBuilder cb = em.getCriteriaBuilder();
 
     CriteriaQuery<T> criteriaQuery = cb.createQuery(itemType);
-    Root<Y> employeeRoot = criteriaQuery.from(rootType);
-
     final CriteriaQuery<T> select = criteriaQuery.select(compoundSelection);
 
     PredicateBuilder predicateBuilder = null;
     if(searchTemplate.getFilters() != null) {
       predicateBuilder = PredicateBuilder
-          .createPredicates(cb, employeeRoot, searchTemplate.getFilters());
+          .createPredicates(cb, root, searchTemplate.getFilters());
 
       select.where(predicateBuilder.getPredicates().toArray(new Predicate[0]));
     }
@@ -40,10 +37,10 @@ public class SearchFilter<T,Y> {
         .isEmpty()) {
       switch (searchTemplate.getOrderDirection()) {
         case "asc":
-          orderBy = cb.asc(employeeRoot.get(searchTemplate.getOrderBy()));
+          orderBy = cb.asc(root.get(searchTemplate.getOrderBy()));
           break;
         case "desc":
-          orderBy = cb.desc(employeeRoot.get(searchTemplate.getOrderBy()));
+          orderBy = cb.desc(root.get(searchTemplate.getOrderBy()));
           break;
       }
     }
