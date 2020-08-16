@@ -35,7 +35,6 @@ public enum Operation {
     name = _name;
   }
 
-  @JsonValue
   public String getId(){
     return id;
   }
