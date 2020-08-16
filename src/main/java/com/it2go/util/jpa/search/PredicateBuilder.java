@@ -142,11 +142,11 @@ public class PredicateBuilder {
         rulePredicate = cb.lessThanOrEqualTo(path, namedParameter);
         break;
       }
-      case GREATHER: {
+      case GREATER: {
         rulePredicate = cb.greaterThan(path, namedParameter);
         break;
       }
-      case GREATHER_OR_EQUAL: {
+      case GREATER_OR_EQUAL: {
         rulePredicate = cb.greaterThanOrEqualTo(path, namedParameter);
         break;
       }
@@ -184,11 +184,11 @@ public class PredicateBuilder {
         rulePredicate = cb.lessThanOrEqualTo(path, namedParameter);
         break;
       }
-      case GREATHER: {
+      case GREATER: {
         rulePredicate = cb.greaterThan(path, namedParameter);
         break;
       }
-      case GREATHER_OR_EQUAL: {
+      case GREATER_OR_EQUAL: {
         rulePredicate = cb.greaterThanOrEqualTo(path, namedParameter);
         break;
       }
