@@ -7,7 +7,7 @@ import lombok.Data;
 public class SearchTemplate implements Serializable {
 
   private String orderBy;
-  private String orderDirection = SearchOrder.ASC.getValue();
+  private SearchOrder orderDirection = SearchOrder.ASC;
   private int maxResult = -1;
   private int offset = 0;
   private Group filters;
