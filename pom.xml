@@ -4,7 +4,7 @@
 
   <groupId>com.it2go</groupId>
   <artifactId>shared-utils</artifactId>
-  <version>1.2</version>
+  <version>1.3-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,7 +21,7 @@
     <developerConnection>scm:git:http://mmbarek:mmbarek@ubuntu-server:7990/scm/base/shared-utils.git
     </developerConnection>
     <url>http://ubuntu-server:7990/scm/base/shared-utils</url>
-    <tag>shared-utils-1.2</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencies>
