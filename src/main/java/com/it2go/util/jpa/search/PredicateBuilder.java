@@ -113,15 +113,17 @@ public class PredicateBuilder {
       }
     }
 
-    switch (filterGroup.getGroupOp()) {
-      case AND:
-        groupPredicate = cb.and(rulesPredicates.toArray(new Predicate[0]));
-        break;
-      case OR:
-        groupPredicate = cb.or(rulesPredicates.toArray(new Predicate[0]));
-        break;
+    if(!rulesPredicates.isEmpty()) {
+      switch (filterGroup.getGroupOp()) {
+        case AND:
+          groupPredicate = cb.and(rulesPredicates.toArray(new Predicate[0]));
+          break;
+        case OR:
+          groupPredicate = cb.or(rulesPredicates.toArray(new Predicate[0]));
+          break;
+      }
+      pb.getPredicates().add(groupPredicate);
     }
-    pb.getPredicates().add(groupPredicate);
 
     return pb;
   }
