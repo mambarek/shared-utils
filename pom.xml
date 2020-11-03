@@ -4,7 +4,7 @@
 
   <groupId>com.it2go</groupId>
   <artifactId>shared-utils</artifactId>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.3</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,6 +21,7 @@
     <url>https://github.com/mambarek/shared-utils.git</url>
     <developerConnection>scm:git:https://github.com/mambarek/shared-utils.git
     </developerConnection>
+    <tag>shared-utils-1.3</tag>
   </scm>
 
   <dependencies>
