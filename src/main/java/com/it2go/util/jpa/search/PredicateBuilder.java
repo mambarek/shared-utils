@@ -37,7 +37,8 @@ public class PredicateBuilder {
   public static <T> PredicateBuilder createPredicates(CriteriaBuilder cb, Root<T> root,
       Group filterGroup) {
     PredicateBuilder pb = new PredicateBuilder();
-
+    Predicate groupPredicate = null;
+    List<Predicate> rulesPredicates = new ArrayList<>();
     for (Rule rule : filterGroup.getRules()) {
       Predicate rulePredicate = null;
 
@@ -108,9 +109,19 @@ public class PredicateBuilder {
       }
 
       if (rulePredicate != null) {
-        pb.getPredicates().add(rulePredicate);
+        rulesPredicates.add(rulePredicate);
       }
     }
+
+    switch (filterGroup.getGroupOp()) {
+      case AND:
+        groupPredicate = cb.and(rulesPredicates.toArray(new Predicate[0]));
+        break;
+      case OR:
+        groupPredicate = cb.or(rulesPredicates.toArray(new Predicate[0]));
+        break;
+    }
+    pb.getPredicates().add(groupPredicate);
 
     return pb;
   }

@@ -18,10 +18,9 @@
   </properties>
 
   <scm>
-    <developerConnection>scm:git:http://mmbarek:mmbarek@ubuntu-server:7990/scm/base/shared-utils.git
+    <url>https://github.com/mambarek/shared-utils.git</url>
+    <developerConnection>scm:git:https://github.com/mambarek/shared-utils.git
     </developerConnection>
-    <url>http://ubuntu-server:7990/scm/base/shared-utils</url>
-    <tag>HEAD</tag>
   </scm>
 
   <dependencies>
@@ -71,12 +70,12 @@
     <snapshotRepository>
       <id>nexus</id>
       <name>nexus-snapshot</name>
-      <url>http://localhost:8081/repository/nexus-snapshot</url>
+      <url>http://localhost:9181/repository/nexus-snapshot</url>
     </snapshotRepository>
     <repository>
       <id>nexus</id>
       <name>nexus-release</name>
-      <url>http://localhost:8081/repository/nexus-release</url>
+      <url>http://localhost:9181/repository/nexus-release</url>
     </repository>
   </distributionManagement>
 
@@ -87,14 +86,14 @@
         <enabled>true</enabled>
       </snapshots>
       <id>nexus-snapshot</id>
-      <url>http://localhost:8081/repository/nexus-snapshot/</url>
+      <url>http://localhost:9181/repository/nexus-snapshot/</url>
     </repository>
     <repository>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
       <id>nexus-release</id>
-      <url>http://localhost:8081/repository/nexus-release/</url>
+      <url>http://localhost:9181/repository/nexus-release/</url>
     </repository>
   </repositories>
 </project>
