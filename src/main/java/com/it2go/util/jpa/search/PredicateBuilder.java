@@ -113,7 +113,7 @@ public class PredicateBuilder {
       }
     }
 
-    if(!rulesPredicates.isEmpty()) {
+    if(rulesPredicates.size() > 1) {
       switch (filterGroup.getGroupOp()) {
         case AND:
           groupPredicate = cb.and(rulesPredicates.toArray(new Predicate[0]));

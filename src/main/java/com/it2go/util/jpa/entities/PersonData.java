@@ -13,6 +13,7 @@ import lombok.Setter;
 /**
  * created by mmbarek on 10.11.2020.
  */
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Getter
 @Setter
 @Embeddable

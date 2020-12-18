@@ -6,7 +6,9 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +25,9 @@ import lombok.NoArgsConstructor;
 public class AddressEntity implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addr_seq_gen")
+    @SequenceGenerator(name = "addr_seq_gen", sequenceName = "addr_seq", allocationSize = 50)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @Column(name = "PUBLIC_ID", unique = true, nullable = false)
