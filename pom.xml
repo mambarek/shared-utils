@@ -12,7 +12,7 @@
     <java.version>11</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <org.projectlombok.version>1.18.12</org.projectlombok.version>
+    <org.projectlombok.version>1.18.20</org.projectlombok.version>
     <slf4j.version>1.7.30</slf4j.version>
     <persistence-api.version>2.2.3</persistence-api.version>
     <jackson.version>2.11.1</jackson.version>

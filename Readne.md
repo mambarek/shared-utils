@@ -20,3 +20,5 @@
 2.3 Prepare the Release
 > mvn release:prepare  
 > mvn release:perform
+
+IMPORTANT: lombok version should be up to date and equal there from microservices-bom 

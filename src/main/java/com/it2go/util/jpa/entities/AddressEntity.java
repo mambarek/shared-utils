@@ -42,7 +42,7 @@ public class AddressEntity implements Serializable {
     private String buildingNr;
 
     @Basic
-    @Column(name = "STREET_TWO", length = 100,nullable = true)
+    @Column(name = "STREET_TWO", length = 100)
     private String streetTwo;
 
     @Basic
