@@ -74,35 +74,4 @@
     </plugins>
   </build>
 
-  <!-- For artifacts upload -->
-  <distributionManagement>
-    <snapshotRepository>
-      <id>nexus</id>
-      <name>nexus-snapshot</name>
-      <url>http://localhost:9181/repository/nexus-snapshot</url>
-    </snapshotRepository>
-    <repository>
-      <id>nexus</id>
-      <name>nexus-release</name>
-      <url>http://localhost:9181/repository/nexus-release</url>
-    </repository>
-  </distributionManagement>
-
-  <!-- For artifacts download -->
-  <repositories>
-    <repository>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>nexus-snapshot</id>
-      <url>http://localhost:9181/repository/nexus-snapshot/</url>
-    </repository>
-    <repository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>nexus-release</id>
-      <url>http://localhost:9181/repository/nexus-release/</url>
-    </repository>
-  </repositories>
 </project>
