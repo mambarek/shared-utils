@@ -1,6 +1,5 @@
 package com.it2go.util.jpa.search;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Operation {
 
