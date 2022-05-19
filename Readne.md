@@ -23,4 +23,7 @@
 
 IMPORTANT: lombok version should be up to date and equal there from microservices-bom 
 
+## Das ist ein git push test 
+
+
 ## Jetzt Bitbucket push test 
