@@ -27,3 +27,4 @@ IMPORTANT: lombok version should be up to date and equal there from microservice
 
 
 ## Jetzt Bitbucket push test 
+pull request anstossen
