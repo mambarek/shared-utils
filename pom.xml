@@ -74,4 +74,33 @@
     </plugins>
   </build>
 
+  <!-- For artifacts upload -->
+  <distributionManagement>
+    <repository>
+      <id>it2go-artifactory-releases</id>
+      <name>It-2go Release Repository</name>
+      <url>https://mmbarek.jfrog.io/artifactory/it2go-releases/</url>
+    </repository>
+  </distributionManagement>
+
+  <!-- For artifacts download -->
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>nexus-snapshot</id>
+      <url>http://localhost:9181/repository/nexus-snapshot/</url>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>nexus-release</id>
+      <url>http://localhost:9181/repository/nexus-release/</url>
+    </repository>
+
+  </repositories>
+
+
 </project>

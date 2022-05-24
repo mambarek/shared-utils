@@ -1,0 +1,66 @@
+#!/usr/bin/env groovy
+node {
+    stage('auschecken') {
+        checkout scm
+    }
+    stage('Build') {
+      withMaven (maven: 'maven-3.8.4'){
+          sh "mvn clean compile"
+        }
+    }
+    stage('Test') {
+      withMaven (maven: 'maven-3.8.4'){
+          sh "mvn clean test"
+        }
+        def pom = readMavenPom()
+        echo "Berechne tag für release ${pom.artifactId} ${pom.version}"
+        echo "Release: ${pom.artifactId}-${pom.version}"
+    }
+
+    if(BRANCH_NAME.contains("release/")) {
+        stage('Deploy') { // deployment
+
+          withMaven (maven: 'maven-3.8.4'){
+               sh "mvn -DskipTests deploy"
+              }
+
+          def pom = readMavenPom()
+          sh 'echo Release ${pom.artifactId}-${pom-version}'
+          //sh 'git tag -a ${} -m "${}"'
+        }
+      }
+}
+
+void tagAndMergeToMatser() {
+def pom = readMavenPom()
+        echo "Berechne tag für release ${pom.artifactId} ${pom.version}"
+        echo "Release: ${pom.artifactId}-${pom.version}"
+        sh "git tag ${pom.artifactId}-${pom.version}"
+        sh "git push --tags"
+
+        // mergeToMaster
+}
+
+void mergeToMstaer() {
+def repositoryUrl = scm.userRemoteConfigs[0].url
+    echo "Merge von ${env.BRANCH_NAME} auf master von ${repositoryUrl}..."
+   sh "git checkout -b jenkins-build-${env.BUILD_NUMBER}"
+    sh "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
+    sh "git fetch origin"
+    sh "git checkout master"
+    sh "git branch --set-upstream-to=origin/master master"
+    sh "git pull"
+    sh "git merge jenkins-build-${env.BUILD_NUMBER}"
+    sh "git push"
+    sh "git checkout ${env.BRANCH_NAME}"
+    echo "Merge von ${env.BRANCH_NAME} auf master von ${repositoryUrl} ist beendet."
+}
+// TODO:
+// maven function extrahieren  def mavenTask(String task)
+// git TAG nach jeder Release
+// sonar
+// docker  https://gist.github.com/merikan/228cdb1893fca91f0663bab7b095757c
+
+// http://localhost:8760/pipeline-syntax/globals
+// http://groovy-lang.org/syntax.html#_shebang_line
+
