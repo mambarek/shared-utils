@@ -1,4 +1,3 @@
-#!groovy
 
 def mavenVersion = 'maven-3.8.4'
 def javaVersion = 'jdk11'
