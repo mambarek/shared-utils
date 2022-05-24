@@ -25,16 +25,17 @@ def runCommand(command){
         bat command
     }
 }
-
+def pom
 node {
 
     ansiColor('xterm') {
          stage('Checkout') {
             echo "Checkout ${pom.artifactId}-${pom-version}..."
             checkout scm
+            pom = readMavenPom()
          }
 
-        def pom = readMavenPom()
+
          stage('Build') {
             echo "Build  ${pom.artifactId}-${pom-version}..."
             withMaven(jdk: javaVersion, maven: mavenVersion) {
