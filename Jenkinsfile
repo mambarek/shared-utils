@@ -2,6 +2,7 @@
 
 def mavenVersion = 'maven-3.8.4'
 def javaVersion = 'jdk11'
+def artefactName = 'shared-utils'
 
 def sendSuccessMail(){
     mail to: "mbarek@it-2go.de", bcc: "", cc: "", from: "Jenkins@it-2go.de", replyTo: "",
@@ -30,7 +31,7 @@ node {
 
     ansiColor('xterm') {
          stage('Checkout') {
-            echo "Checkout ${pom.artifactId}-${pom-version}..."
+            echo "Checkout ${artefactName}..."
             checkout scm
             pom = readMavenPom()
          }
