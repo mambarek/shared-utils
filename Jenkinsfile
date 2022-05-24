@@ -27,13 +27,14 @@ def runCommand(command){
 }
 
 node {
-    def pom = readMavenPom()
+
     ansiColor('xterm') {
          stage('Checkout') {
             echo "Checkout ${pom.artifactId}-${pom-version}..."
             checkout scm
          }
 
+        def pom = readMavenPom()
          stage('Build') {
             echo "Build  ${pom.artifactId}-${pom-version}..."
             withMaven(jdk: javaVersion, maven: mavenVersion) {
