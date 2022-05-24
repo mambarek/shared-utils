@@ -1,6 +1,8 @@
+#!groovy
 
 def mavenVersion = 'maven-3.8.4'
 def javaVersion = 'jdk11'
+def pom = readMavenPom()
 
 def sendSuccessMail(){
     mail to: "mbarek@it-2go.de", bcc: "", cc: "", from: "Jenkins@it-2go.de", replyTo: "",
