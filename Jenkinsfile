@@ -38,7 +38,7 @@ node {
 
 
          stage('Build') {
-            echo "Build  ${pom.artifactId}-${pom-version}..."
+            echo "Build  ${pom.artifactId}-${pom.version}..."
             withMaven(jdk: javaVersion, maven: mavenVersion) {
                 try{
                     runCommand('mvn clean package -DskipTests')
@@ -50,7 +50,7 @@ node {
          }
 
         stage('Test') {
-            echo "Test  ${pom.artifactId}-${pom-version}..."
+            echo "Test  ${pom.artifactId}-${pom.version}..."
             withMaven(jdk: javaVersion, maven: mavenVersion) {
                 try{
                     runCommand('mvn test')
@@ -62,7 +62,7 @@ node {
         }
 /*
         stage('Docker_build') {
-            echo "Docker build ${pom.artifactId}-${pom-version} image..."
+            echo "Docker build ${pom.artifactId}-${pom.version} image..."
             withMaven(jdk: javaVersion, maven: mavenVersion) {
                 try{
                     runCommand('mvn docker:build')
@@ -74,7 +74,7 @@ node {
         }
 
         stage('Docker_push') {
-            echo "Docker push ${pom.artifactId}-${pom-version} image..."
+            echo "Docker push ${pom.artifactId}-${pom.version} image..."
             withMaven(jdk: javaVersion, maven: mavenVersion) {
                 try{
                     runCommand('mvn docker:push')
