@@ -3,6 +3,10 @@
 def mavenVersion = 'maven-3.8.4'
 def javaVersion = 'jdk11'
 def artefactName = 'shared-utils'
+def artifactory_server = 'jfrog-artifactory'
+def releaseRepo = 'it2go-release'
+def snapshotRepo = 'it2go-snapshots'
+def depsResolverRepo = 'default-maven-virtual'
 
 def sendSuccessMail(){
     mail to: "mbarek@it-2go.de", bcc: "", cc: "", from: "Jenkins@it-2go.de", replyTo: "",
@@ -36,6 +40,18 @@ node {
             pom = readMavenPom()
          }
 
+        stage ('Artifactory configuration') {
+            // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
+            server = Artifactory.server artifactory_server
+
+            rtMaven = Artifactory.newMavenBuild()
+            rtMaven.tool = mavenVersion
+            rtMaven.deployer releaseRepo: releaseRepo, snapshotRepo: snapshotRepo, server: server
+            rtMaven.resolver releaseRepo: depsResolverRepo, snapshotRepo: depsResolverRepo, server: server
+            rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
+
+            buildInfo = Artifactory.newBuildInfo()
+        }
 
          stage('Build') {
             echo "Build  ${pom.artifactId}-${pom.version}..."
@@ -59,6 +75,18 @@ node {
                     warnError(exception.message)
                 }
             }
+        }
+
+        stage ('Install') {
+            rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
+        }
+
+        stage ('Deploy') {
+            rtMaven.deployer.deployArtifacts buildInfo
+        }
+
+        stage ('Publish build info') {
+            server.publishBuildInfo buildInfo
         }
 /*
         stage('Docker_build') {

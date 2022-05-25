@@ -1,5 +1,9 @@
 # Release History
 
+
+## 1.8.1
+    - deploy to Artifactory
+
 ## Release 1.8 (24.05.2022)
    - Release History file added
    - Jenkinsfile added
