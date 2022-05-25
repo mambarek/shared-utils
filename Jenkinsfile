@@ -4,7 +4,7 @@ def mavenVersion = 'maven-3.8.4'
 def javaVersion = 'jdk11'
 def artefactName = 'shared-utils'
 def artifactory_server = 'jfrog-artifactory'
-def releaseRepo = 'it2go-release'
+def releaseRepo = 'it2go-releases'
 def snapshotRepo = 'it2go-snapshots'
 def depsResolverRepo = 'default-maven-virtual'
 
