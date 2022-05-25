@@ -39,8 +39,7 @@ node {
             checkout scm
             pom = readMavenPom()
          }
-
-
+        /*
         stage ('Artifactory configuration') {
             // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
             server = Artifactory.server artifactory_server
@@ -52,7 +51,7 @@ node {
             rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
 
             buildInfo = Artifactory.newBuildInfo()
-        }
+        }*/
 
          stage('Build') {
             echo "Build  ${pom.artifactId}-${pom.version}..."
@@ -81,14 +80,8 @@ node {
         if(BRANCH_NAME.contains("release/")) {
 
             // install to .m2 wird glaube ich nicht gebraucht
-            /*
             stage ('Install') {
-                rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
-            }*/
-
-            stage ('Deploy') {
                 // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
-                /*
                 server = Artifactory.server artifactory_server
 
                 rtMaven = Artifactory.newMavenBuild()
@@ -97,7 +90,11 @@ node {
                 rtMaven.resolver releaseRepo: depsResolverRepo, snapshotRepo: depsResolverRepo, server: server
                 rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
 
-                buildInfo = Artifactory.newBuildInfo()*/
+                buildInfo = Artifactory.newBuildInfo()
+                rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
+            }
+
+            stage ('Deploy') {
                 rtMaven.deployer.deployArtifacts buildInfo
             }
 
