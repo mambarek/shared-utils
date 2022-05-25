@@ -4,7 +4,7 @@
 
   <groupId>com.it2go</groupId>
   <artifactId>shared-utils</artifactId>
-  <version>1.8-SNAPSHOT</version>
+  <version>1.8</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -84,23 +84,6 @@
   </distributionManagement>
 
   <!-- For artifacts download -->
-  <repositories>
-    <repository>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>nexus-snapshot</id>
-      <url>http://localhost:9181/repository/nexus-snapshot/</url>
-    </repository>
-    <repository>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>nexus-release</id>
-      <url>http://localhost:9181/repository/nexus-release/</url>
-    </repository>
-
-  </repositories>
 
 
 </project>
