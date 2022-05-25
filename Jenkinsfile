@@ -40,7 +40,7 @@ node {
             pom = readMavenPom()
          }
 
-        /*
+
         stage ('Artifactory configuration') {
             // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
             server = Artifactory.server artifactory_server
@@ -52,7 +52,7 @@ node {
             rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
 
             buildInfo = Artifactory.newBuildInfo()
-        }*/
+        }
 
          stage('Build') {
             echo "Build  ${pom.artifactId}-${pom.version}..."
@@ -88,6 +88,7 @@ node {
 
             stage ('Deploy') {
                 // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
+                /*
                 server = Artifactory.server artifactory_server
 
                 rtMaven = Artifactory.newMavenBuild()
@@ -96,7 +97,7 @@ node {
                 rtMaven.resolver releaseRepo: depsResolverRepo, snapshotRepo: depsResolverRepo, server: server
                 rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
 
-                buildInfo = Artifactory.newBuildInfo()
+                buildInfo = Artifactory.newBuildInfo()*/
                 rtMaven.deployer.deployArtifacts buildInfo
             }
 
