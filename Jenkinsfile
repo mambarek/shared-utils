@@ -40,6 +40,7 @@ node {
             pom = readMavenPom()
          }
 
+        /*
         stage ('Artifactory configuration') {
             // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
             server = Artifactory.server artifactory_server
@@ -51,7 +52,7 @@ node {
             rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
 
             buildInfo = Artifactory.newBuildInfo()
-        }
+        }*/
 
          stage('Build') {
             echo "Build  ${pom.artifactId}-${pom.version}..."
@@ -77,16 +78,30 @@ node {
             }
         }
 
-        stage ('Install') {
-            rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
-        }
+        if(BRANCH_NAME.contains("release/")) {
+            // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
+            server = Artifactory.server artifactory_server
 
-        stage ('Deploy') {
-            rtMaven.deployer.deployArtifacts buildInfo
-        }
+            rtMaven = Artifactory.newMavenBuild()
+            rtMaven.tool = mavenVersion
+            rtMaven.deployer releaseRepo: releaseRepo, snapshotRepo: snapshotRepo, server: server
+            rtMaven.resolver releaseRepo: depsResolverRepo, snapshotRepo: depsResolverRepo, server: server
+            rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
 
-        stage ('Publish build info') {
-            server.publishBuildInfo buildInfo
+            buildInfo = Artifactory.newBuildInfo()
+            // install to .m2 wird glaube ich nicht gebraucht
+            /*
+            stage ('Install') {
+                rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
+            }*/
+
+            stage ('Deploy') {
+                rtMaven.deployer.deployArtifacts buildInfo
+            }
+
+            stage ('Publish build info') {
+                server.publishBuildInfo buildInfo
+            }
         }
 /*
         stage('Docker_build') {
