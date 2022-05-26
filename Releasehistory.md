@@ -1,6 +1,9 @@
 # Release History
 
 
+### 1.8.6 (25.05.2022)
+    - Groovy variable are global if not defined with def. so remove def 
+      for pom, rtMaven and server 
 ### 1.8.5 (25.05.2022)
     - Jenkinsfile2 is ready for build, test and deploy to Artifactory 
 

@@ -26,8 +26,6 @@ def sendErrorMail(error){
     ${env.BUILD_URL}console"""
 }
 
-def pom, server, rtMaven
-
 node {
 
      stage('Checkout') {
@@ -100,7 +98,6 @@ node {
 }
 
 def tagAndMergeToMatser() {
-    def pom = readMavenPom()
     echo "Berechne tag für release ${pom.artifactId} ${pom.version}"
     echo "Release: ${pom.artifactId}-${pom.version}"
     sh "git tag ${pom.artifactId}-${pom.version}"
