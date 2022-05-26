@@ -30,101 +30,75 @@ def runCommand(command){
         bat command
     }
 }
-def pom
+//def pom
 node {
 
-    ansiColor('xterm') {
-         stage('Checkout') {
-            echo "Checkout ${artefactName}..."
-            checkout scm
-            pom = readMavenPom()
-         }
+     stage('Checkout') {
+        echo "Checkout ${artefactName}..."
+        checkout scm
+        pom = readMavenPom()
+     }
 
-        stage ('Artifactory configuration') {
-            // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
-            server = Artifactory.server artifactory_server
+    stage ('Artifactory configuration') {
+        // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
+        server = Artifactory.server artifactory_server
 
-            rtMaven = Artifactory.newMavenBuild()
-            rtMaven.tool = mavenVersion
-            rtMaven.deployer releaseRepo: releaseRepo, snapshotRepo: snapshotRepo, server: server
-            rtMaven.resolver releaseRepo: depsResolverRepo, snapshotRepo: depsResolverRepo, server: server
-            rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
+        rtMaven = Artifactory.newMavenBuild()
+        rtMaven.tool = mavenVersion
+        rtMaven.deployer releaseRepo: releaseRepo, snapshotRepo: snapshotRepo, server: server
+        rtMaven.resolver releaseRepo: depsResolverRepo, snapshotRepo: depsResolverRepo, server: server
+        rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
 
-            buildInfo = Artifactory.newBuildInfo()
-        }
+        buildInfo = Artifactory.newBuildInfo()
+    }
 
-         stage('Build') {
-            echo "Build  ${pom.artifactId}-${pom.version}..."
-            withMaven(jdk: javaVersion, maven: mavenVersion) {
-                try{
-                    rtMaven.run pom: 'pom.xml', goals: 'clean package -DskipTests=true'
-                } catch(exception){
-                    sendErrorMail("Error occurred while building, error: " + exception.message)
-                    warnError(exception.message)
-                }
-            }
-         }
-
-        stage('Test') {
-            echo "Test  ${pom.artifactId}-${pom.version}..."
-            withMaven(jdk: javaVersion, maven: mavenVersion) {
-                try{
-                    rtMaven.run pom: 'pom.xml', goals: 'clean test'
-                } catch(exception){
-                    sendErrorMail("Error occurred while testing, error: " + exception.message)
-                    warnError(exception.message)
-                }
+     stage('Build') {
+        echo "Build  ${pom.artifactId}-${pom.version}..."
+        withMaven(jdk: javaVersion, maven: mavenVersion) {
+            try{
+                rtMaven.run pom: 'pom.xml', goals: 'clean package -DskipTests=true'
+            } catch(exception){
+                sendErrorMail("Error occurred while building, error: " + exception.message)
+                warnError(exception.message)
             }
         }
+     }
 
-        if(BRANCH_NAME.contains("release/")) {
-
-            stage ('Publish') {
-                try{
-                    rtMaven.deployer.deployArtifacts buildInfo
-                    rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
-                    server.publishBuildInfo buildInfo
-                    tagAndMergeToMatser()
-                } catch(exception){
-                    sendErrorMail("Error occurred while publish, error: " + exception.message)
-                    warnError(exception.message)
-                }
+    stage('Test') {
+        echo "Test  ${pom.artifactId}-${pom.version}..."
+        withMaven(jdk: javaVersion, maven: mavenVersion) {
+            try{
+                rtMaven.run pom: 'pom.xml', goals: 'clean test'
+            } catch(exception){
+                sendErrorMail("Error occurred while testing, error: " + exception.message)
+                warnError(exception.message)
             }
         }
-/*
-        stage('Docker_build') {
-            echo "Docker build ${pom.artifactId}-${pom.version} image..."
-            withMaven(jdk: javaVersion, maven: mavenVersion) {
-                try{
-                    runCommand('mvn docker:build')
-                } catch(exception){
-                    sendErrorMail("Error occurred while building docker image, error: " + exception.message)
-                    warnError(exception.message)
-                }
+    }
+
+    if(BRANCH_NAME.contains("release/")) {
+
+        stage ('Publish') {
+            try{
+                rtMaven.deployer.deployArtifacts buildInfo
+                rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
+                server.publishBuildInfo buildInfo
+                tagAndMergeToMatser()
+            } catch(exception){
+                sendErrorMail("Error occurred while publish, error: " + exception.message)
+                warnError(exception.message)
             }
         }
+    }
 
-        stage('Docker_push') {
-            echo "Docker push ${pom.artifactId}-${pom.version} image..."
-            withMaven(jdk: javaVersion, maven: mavenVersion) {
-                try{
-                    runCommand('mvn docker:push')
-                } catch(exception){
-                    sendErrorMail("Error occurred while pushing docker image, error: " + exception.message)
-                    warnError(exception.message)
-                }
-            }
-        }
-*/
-        stage('Notify'){
-            echo "Notify contributors ..."
-            sendSuccessMail()
-        }
+    stage('Notify'){
+        echo "Notify contributors ..."
+        sendSuccessMail()
+    }
 
-        stage('Cleanup') {
-            // Delete workspace when build is done
-            cleanWs()
-        }
+    stage('Cleanup') {
+        // Delete workspace when build is done
+        cleanWs()
     }
 }
 
