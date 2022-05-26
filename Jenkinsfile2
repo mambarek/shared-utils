@@ -11,7 +11,9 @@ def depsResolverRepo = 'default-maven-virtual'
 def sendSuccessMail(){
     mail to: "mbarek@it-2go.de", bcc: "", cc: "", from: "Jenkins@it-2go.de", replyTo: "",
     subject: "Build  ${env.JOB_NAME} done",
-    body: "Your Build  ${env.JOB_NAME} #${env.BUILD_NUMBER} is successfully done."
+    body: """Your Build  ${env.JOB_NAME} #${env.BUILD_NUMBER} is successfully done.
+    For details check the Job console: 
+    ${env.BUILD_URL}console"""
 }
 
 def sendErrorMail(error){
@@ -20,17 +22,12 @@ def sendErrorMail(error){
     body: """
     Your Build  ${env.JOB_NAME} #${env.BUILD_NUMBER} fails.
     ${error}
-    For details check the Job console: ${env.BUILD_URL}console"""
+    For details check the Job console: 
+    ${env.BUILD_URL}console"""
 }
 
-def runCommand(command){
-    if(isUnix()){
-        sh command
-    } else {
-        bat command
-    }
-}
-//def pom
+def pom, server, rtMaven
+
 node {
 
      stage('Checkout') {
