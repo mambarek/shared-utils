@@ -39,7 +39,7 @@ node {
             checkout scm
             pom = readMavenPom()
          }
-        /*
+
         stage ('Artifactory configuration') {
             // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
             server = Artifactory.server artifactory_server
@@ -51,13 +51,13 @@ node {
             rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
 
             buildInfo = Artifactory.newBuildInfo()
-        }*/
+        }
 
          stage('Build') {
             echo "Build  ${pom.artifactId}-${pom.version}..."
             withMaven(jdk: javaVersion, maven: mavenVersion) {
                 try{
-                    runCommand('mvn clean package -DskipTests')
+                    rtMaven.run pom: 'pom.xml', goals: 'clean package -DskipTests=true'
                 } catch(exception){
                     sendErrorMail("Error occurred while building, error: " + exception.message)
                     warnError(exception.message)
@@ -69,7 +69,7 @@ node {
             echo "Test  ${pom.artifactId}-${pom.version}..."
             withMaven(jdk: javaVersion, maven: mavenVersion) {
                 try{
-                    runCommand('mvn test')
+                    rtMaven.run pom: 'pom.xml', goals: 'clean test'
                 } catch(exception){
                     sendErrorMail("Error occurred while testing, error: " + exception.message)
                     warnError(exception.message)
@@ -78,29 +78,17 @@ node {
         }
 
         if(BRANCH_NAME.contains("release/")) {
-            // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
-            server = Artifactory.server artifactory_server
 
-            rtMaven = Artifactory.newMavenBuild()
-            rtMaven.tool = mavenVersion
-            rtMaven.deployer releaseRepo: releaseRepo, snapshotRepo: snapshotRepo, server: server
-            rtMaven.resolver releaseRepo: depsResolverRepo, snapshotRepo: depsResolverRepo, server: server
-            rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
-
-            buildInfo = Artifactory.newBuildInfo()
-            // install to .m2 wird glaube ich nicht gebraucht
-            // install wird doch gebraucht um deploy ausführen zu können
-            // vielleicht install zu deploy moven und das ganze als publish nennen
-            stage ('Install') {
-                rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
-            }
-
-            stage ('Deploy') {
-                rtMaven.deployer.deployArtifacts buildInfo
-            }
-
-            stage ('Publish build info') {
-                server.publishBuildInfo buildInfo
+            stage ('Publish') {
+                try{
+                    rtMaven.deployer.deployArtifacts buildInfo
+                    rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
+                    server.publishBuildInfo buildInfo
+                    tagAndMergeToMatser()
+                } catch(exception){
+                    sendErrorMail("Error occurred while publish, error: " + exception.message)
+                    warnError(exception.message)
+                }
             }
         }
 /*
@@ -139,3 +127,28 @@ node {
         }
     }
 }
+
+def tagAndMergeToMatser() {
+    echo "Berechne tag für release ${pom.artifactId} ${pom.version}"
+    echo "Release: ${pom.artifactId}-${pom.version}"
+    sh "git tag ${pom.artifactId}-${pom.version}"
+    sh "git push --tags"
+
+    mergeToMstaer()
+}
+
+def mergeToMstaer() {
+    def repositoryUrl = scm.userRemoteConfigs[0].url
+    echo "Merge von ${env.BRANCH_NAME} auf master von ${repositoryUrl}..."
+    sh "git checkout -b jenkins-build-${env.BUILD_NUMBER}"
+    sh "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
+    sh "git fetch origin"
+    sh "git checkout master"
+    sh "git branch --set-upstream-to=origin/master master"
+    sh "git pull"
+    sh "git merge jenkins-build-${env.BUILD_NUMBER}"
+    sh "git push"
+    sh "git checkout ${env.BRANCH_NAME}"
+    echo "Merge von ${env.BRANCH_NAME} auf master von ${repositoryUrl} ist beendet."
+}
+
