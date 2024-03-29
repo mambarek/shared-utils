@@ -77,10 +77,15 @@
   <!-- For artifacts upload -->
   <distributionManagement>
     <repository>
-      <id>it2go-artifactory-releases</id>
-      <name>It-2go Release Repository</name>
-      <url>https://mmbarek.jfrog.io/artifactory/it2go-releases/</url>
+      <id>release</id>
+      <name>8cd10be88324-releases</name>
+      <url>http://localhost:8081/artifactory/it2go-libs-release</url>
     </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>8cd10be88324-snapshots</name>
+      <url>http://localhost:8081/artifactory/it2go-libs-snapshot</url>
+    </snapshotRepository>
   </distributionManagement>
 
   <!-- For artifacts download -->
